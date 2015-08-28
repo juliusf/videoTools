@@ -35,17 +35,23 @@ def main():
     number_of_streams = math.ceil((r_max - r_min) / step_length)
 
     for bitrate in range(r_min, r_max, step_length):
-        convert_with_ffmpeg(args.movieFile, bitrate)
+        out_file = '/tmp/%s_%sk.mov' % (args.movieFile, bitrate)
+        convert_with_ffmpeg(args.movieFile, bitrate, out_file)
+        csv_file = '%s.csv' % (out_file)
+        create_csv_from_video(out_file, csv_file)
 
-def convert_with_ffmpeg(file, bitrate):
+def convert_with_ffmpeg(file, bitrate, out_file):
 
-    out_file = '/tmp/%s_%sk.mov' % (file, bitrate)
     if os.path.isfile(out_file):
         print("file %s exists. skipping" % (out_file))
     else:
         print("converting %s as %s kBit/s" % (file, bitrate))
         subprocess.call(["ffmpeg", "-i", file, "-b:v", str(bitrate) +"k", "-bufsize", str(bitrate) +"k", '/tmp/%s_%sk.mov' % (file, bitrate)])
 
+def create_csv_from_video(video_file, csv_file):
+    vs = VideoStream(video_file)
+    for frame in VideoStream(video_file):
+        print(frame.timestamp)
 
 if __name__ == "__main__":
     main()
