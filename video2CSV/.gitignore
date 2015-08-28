@@ -1,3 +1,5 @@
+#executables
+extract_video_info
 # movie stuff
 *.mov
 *.csv
