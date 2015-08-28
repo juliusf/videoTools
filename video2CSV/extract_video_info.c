@@ -100,8 +100,10 @@ static int decode_packet(int *got_frame, int cached)
             length+= sprintf(buffer + length, "libavcodec %s;", video_dec_ctx->codec->name);
             length+= sprintf(buffer + length, "%f;", (float) rate.num / (float) rate.den);
             
-            printf("%s\n",buffer);
-
+            if (pkt.duration > 0)
+            {
+                printf("%s\n",buffer);
+            }
     }
     }
 

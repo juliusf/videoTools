@@ -2,7 +2,6 @@
 
 __author__ = 'jules'
 
-from ffvideo import VideoStream
 import argparse
 import os.path
 import subprocess
@@ -32,10 +31,10 @@ def main():
 
     step_length = int(args.stepLength)
 
-    number_of_streams = math.ceil((r_max - r_min) / step_length)
+    #number_of_streams = math.ceil((r_max - r_min) / step_length)
 
     for bitrate in range(r_min, r_max, step_length):
-        out_file = '/tmp/%s_%sk.mov' % (args.movieFile, bitrate)
+        out_file = '/tmp/%sk_%s' % (bitrate, args.movieFile)
         convert_with_ffmpeg(args.movieFile, bitrate, out_file)
         csv_file = '%s.csv' % (out_file)
         create_csv_from_video(out_file, csv_file)
@@ -46,12 +45,11 @@ def convert_with_ffmpeg(file, bitrate, out_file):
         print("file %s exists. skipping" % (out_file))
     else:
         print("converting %s as %s kBit/s" % (file, bitrate))
-        subprocess.call(["ffmpeg", "-i", file, "-b:v", str(bitrate) +"k", "-bufsize", str(bitrate) +"k", '/tmp/%s_%sk.mov' % (file, bitrate)])
+        subprocess.call(["ffmpeg", "-i", file, "-b:v", str(bitrate) +"k", "-bufsize", str(bitrate) +"k", '/tmp/%sk_%s' % (bitrate, file)])
 
 def create_csv_from_video(video_file, csv_file):
-    vs = VideoStream(video_file)
-    for frame in VideoStream(video_file):
-        print(frame.timestamp)
+        print("creating CSV for file: %s") % (video_file)
+        subprocess.call(["./extract_video_info %s > %s" % (video_file, csv_file)], shell=True)
 
 if __name__ == "__main__":
     main()
