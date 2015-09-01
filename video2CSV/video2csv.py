@@ -45,7 +45,7 @@ def convert_with_ffmpeg(file, bitrate, out_file):
         print("file %s exists. skipping" % (out_file))
     else:
         print("converting %s as %s kBit/s" % (file, bitrate))
-        subprocess.call(["ffmpeg", "-i", file, "-b:v", str(bitrate) +"k", "-bufsize", str(bitrate) +"k", '/tmp/%sk_%s' % (bitrate, file)])
+        subprocess.call(["ffmpeg", "-i", file, "-b:v", str(bitrate) +"k", "-bufsize", str(bitrate) +"k", '/tmp/%sk_%s' % (bitrate, out_file)])
 
 def create_csv_from_video(video_file, csv_file):
         print("creating CSV for file: %s") % (video_file)
