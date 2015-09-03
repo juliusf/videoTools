@@ -42,7 +42,7 @@ static int64_t totalBitSum = 0;
 
 static int decode_packet(int *got_frame, int cached)
 {
-    int decoded = pkt.size;
+    int decoded = pkt.size; // size in bytes
     double frame_duration = (double) video_stream->time_base.num / (double) video_stream->time_base.den;
     char buffer[1024];
     int length = 0;
@@ -80,14 +80,14 @@ static int decode_packet(int *got_frame, int cached)
                 bitRateSum = 0;
             }
 
-            bitRateSum += decoded;
-            totalBitSum += decoded;
+            bitRateSum += decoded * 8; // get bits
+            totalBitSum += decoded * 8; // get bits
 
             last_time_base = time_base;
             int32_t timestamp = (pkt.dts * frame_duration);
 
             
-            //printf("Total Average Bitrate: %f\n", totalBitSum / (pkt.dts * frame_duration * 100));
+            printf("Total Average Bitrate: %f\n", totalBitSum / (pkt.dts * frame_duration));
             AVRational rate = av_guess_frame_rate(fmt_ctx, video_stream, frame);
             length+= sprintf(buffer + length, "%d kbps;", (time_base == 0.0) ? (int) bitRateSum : (int)(bitRateSum / time_base / 100));
             length+= sprintf(buffer + length, "%d;", decoded);

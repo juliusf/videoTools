@@ -32,9 +32,9 @@ def main():
     step_length = int(args.stepLength)
 
     #number_of_streams = math.ceil((r_max - r_min) / step_length)
-
+    suffix_pos = args.movieFile.rfind(".")
     for bitrate in range(r_min, r_max, step_length):
-        out_file = '/tmp/%sk_%s' % (bitrate, args.movieFile)
+        out_file = "/tmp/" + args.movieFile[:suffix_pos] + "_%sk." % (bitrate) + args.movieFile[suffix_pos+1:]
         convert_with_ffmpeg(args.movieFile, bitrate, out_file)
         csv_file = '%s.csv' % (out_file)
         create_csv_from_video(out_file, csv_file)
@@ -47,7 +47,7 @@ def convert_with_ffmpeg(file, bitrate, out_file):
         print("converting %s as %s kBit/s" % (file, bitrate))
         print("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate) - tolerance) + " -maxrate %sk" % str(int(bitrate) + tolerance) +" -bufsize " + str(bitrate) +"k "+ out_file)
         #subprocess.call(["ffmpeg", "-i", file, "-b:v", str(bitrate) +"k", "-minrate %sk" % str(int(bitrate) - tolerance), "-maxrate %sk" % str(int(bitrate) + tolerance),"-bufsize", str(bitrate) +"k ", out_file])
-        subprocess.call("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate) - tolerance) + " -maxrate %sk" % str(int(bitrate) + tolerance) +" -bufsize " + str(bitrate) +"k "+ out_file, shell=True)
+        subprocess.call("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate) - tolerance) + " -maxrate %sk" % str(int(bitrate) + tolerance) +" -bufsize " + str(bitrate) +"k " + "-an " + out_file, shell=True)
 
 def create_csv_from_video(video_file, csv_file):
         print("creating CSV for file: %s") % (video_file)
