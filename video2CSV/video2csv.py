@@ -48,6 +48,7 @@ def convert_with_ffmpeg(file, bitrate, out_file):
         print("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate) - tolerance) + " -maxrate %sk" % str(int(bitrate) + tolerance) +" -bufsize " + str(bitrate) +"k "+ out_file)
         #subprocess.call(["ffmpeg", "-i", file, "-b:v", str(bitrate) +"k", "-minrate %sk" % str(int(bitrate) - tolerance), "-maxrate %sk" % str(int(bitrate) + tolerance),"-bufsize", str(bitrate) +"k ", out_file])
         subprocess.call("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate) - tolerance) + " -maxrate %sk" % str(int(bitrate) + tolerance) +" -bufsize " + str(bitrate) +"k "+ out_file, shell=True)
+
 def create_csv_from_video(video_file, csv_file):
         print("creating CSV for file: %s") % (video_file)
         subprocess.call(["./extract_video_info %s > %s" % (video_file, csv_file)], shell=True)

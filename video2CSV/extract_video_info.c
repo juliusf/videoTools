@@ -98,7 +98,7 @@ static int decode_packet(int *got_frame, int cached)
             length+= sprintf(buffer + length, "%s;",src_filename);
             length+= sprintf(buffer + length, "decoderFrameRateDummy;");
             length+= sprintf(buffer + length, "libavcodec %s;", video_dec_ctx->codec->name);
-            length+= sprintf(buffer + length, "%f;", (float) rate.num / (float) rate.den);
+            length+= sprintf(buffer + length, "%f", (float) rate.num / (float) rate.den);
             
             if (pkt.duration > 0) // discards invalid endframes
             {
@@ -198,6 +198,8 @@ int main(int argc, char **argv)
     pkt.data = NULL;
     pkt.size = 0;
 
+    /* print the csv header */
+    printf(";Bildtyp: ;Eingangsbitrate: ;Kodierte Bildgröße: ;Zeitstempel des Bildes: ;Aktuelles Bild: ;Anzeigedauer des Bildes: ;Bisherige Spielzeit: ;Quelldateiname: ;Decoderbildrate: ;Decoder: ;Filmbildrate:\n");
     /* read frames from the file */
     while (av_read_frame(fmt_ctx, &pkt) >= 0) {
         AVPacket orig_pkt = pkt;
