@@ -45,9 +45,9 @@ def convert_with_ffmpeg(file, bitrate, out_file):
         print("file %s exists. skipping" % (out_file))
     else:
         print("converting %s as %s kBit/s" % (file, bitrate))
-        print("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate) - tolerance) + " -maxrate %sk" % str(int(bitrate) + tolerance) +" -bufsize " + str(bitrate) +"k "+ out_file)
+        #print("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate) - tolerance) + " -maxrate %sk" % str(int(bitrate) + tolerance) +" -bufsize " + str(bitrate) +"k "+ out_file)
         #subprocess.call(["ffmpeg", "-i", file, "-b:v", str(bitrate) +"k", "-minrate %sk" % str(int(bitrate) - tolerance), "-maxrate %sk" % str(int(bitrate) + tolerance),"-bufsize", str(bitrate) +"k ", out_file])
-        subprocess.call("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate) - tolerance) + " -maxrate %sk" % str(int(bitrate) + tolerance) +" -bufsize " + str(2*bitrate) +"k " + "-an " + out_file, shell=True)
+        subprocess.call("ffmpeg -i "+ file + " -b:v "+ str(bitrate) + "k" + " -minrate %sk" % str(int(bitrate)) + " -maxrate %sk" % str(bitrate) +" -bufsize " + str(bitrate) +"k " + "-an " + out_file, shell=True)
 
 def create_csv_from_video(video_file, csv_file):
         print("creating CSV for file: %s") % (video_file)
