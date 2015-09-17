@@ -59,13 +59,12 @@ static int decode_packet(int *got_frame, int cached)
 
         if (*got_frame)
         {
-            switch(frame->pict_type)
+            switch(frame->key_frame)
             {
-                case AV_PICTURE_TYPE_I:
+                case 1:
                     length+= sprintf(buffer + length, "I        QPEL;");
                     break;
-                case AV_PICTURE_TYPE_P:
-                case AV_PICTURE_TYPE_B:
+                case 0:
                     length+= sprintf(buffer + length, "P        QPEL;");
                     break;
                 default:
