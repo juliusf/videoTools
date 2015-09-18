@@ -56,7 +56,6 @@ static int decode_packet(int *got_frame, int cached)
             fprintf(stderr, "Error decoding video frame (%s)\n", av_err2str(ret));
             return ret;
         }
-
         if (*got_frame)
         {
             switch(frame->key_frame)
@@ -88,8 +87,9 @@ static int decode_packet(int *got_frame, int cached)
             
             //printf("Total Average Bitrate: %f\n", totalBitSum / (pkt.dts * frame_duration) / 1000);
             AVRational rate = av_guess_frame_rate(fmt_ctx, video_stream, frame);
+
             length+= sprintf(buffer + length, "%d kbps;", (time_base == 0.0) ? (int) bitRateSum / 1000: (int)(bitRateSum / time_base / 1000));
-            length+= sprintf(buffer + length, "%d;", decoded);
+            length+= sprintf(buffer + length, "%d;", av_frame_get_pkt_size(frame));
             length+= sprintf(buffer + length, "%d - %d;", (int32_t) (pkt.dts * frame_duration * 1000), (int32_t) ((pkt.dts + pkt.duration) * frame_duration * 1000));
             length+= sprintf(buffer + length, "%d;", frame->coded_picture_number);
             length+= sprintf(buffer + length, "%d ms;", (int) (pkt.duration * frame_duration * 1000));
